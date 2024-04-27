@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Queen</title>
+
+    <style>
+      section {
+        display: flex;
+      }
+
+      section form {
+        border: 1px solid #000;
+        padding: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <section>
+      <form id="upload-form" method="post" action="/upload" enctype="multipart/form-data">
+        <h2>Upload Form</h2>
+        <div>
+          <label>Name:</label>
+          <input type="text" name="name" required />
+        </div>
+        <div>
+          <label>Email:</label>
+          <input type="email" name="email" required />
+        </div>
+        <div>
+          <label>Password:</label>
+          <input type="password" name="password" required />
+        </div>
+        <div>
+          <label>File:</label>
+          <input type="file" name="files" required multiple />
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+
+      <form id="json-form" method="post" action="/json" enctype="multipart/form-data">
+        <h2>JSON Form</h2>
+        <div>
+          <label>Name:</label>
+          <input type="text" name="name" required />
+        </div>
+        <div>
+          <label>Email:</label>
+          <input type="email" name="email" required />
+        </div>
+        <div>
+          <label>Password:</label>
+          <input type="password" name="password" required />
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    </section>
+
+    <script>
+      const $uploadForm = document.getElementById("upload-form");
+      $uploadForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const payload = new FormData($uploadForm);
+
+        const res = await fetch($uploadForm.action, {
+          method: "post",
+          body: payload,
+        });
+
+        const json = await res.json();
+        console.log("upload form server response:", json);
+      });
+
+      const $jsonForm = document.getElementById("json-form");
+      $jsonForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const payload = {};
+
+        for (const el of $jsonForm.elements) {
+          if (el.tagName === "INPUT" && el.name) {
+            payload[el.name] = el.value;
+          }
+        }
+
+        const res = await fetch($jsonForm.action, {
+          method: "post",
+          body: JSON.stringify(payload),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        const json = await res.json();
+        console.log("JSON form server response:", json);
+      });
+    </script>
+  </body>
+</html>
