@@ -3,6 +3,7 @@ Queen.js is a lightweight web framework inspired by Express.js, designed for Nod
 
 ## Features
 - **Route Handling**: Define routes using HTTP methods like GET, POST, PUT, PATCH, and DELETE.
+- **Dynamic Route Parameters**: You can define routes with parameters using the syntax :parameterName, and these parameters can be accessed in route handlers via `req.params.parameterName`.
 - **Plugin (middleware) Support**: Easily integrate middleware functions, called plugins in Queen, to execute tasks before handling requests.
 - **Request and Response Handling**: Access request and response objects with extended functionalities.
 - **JSON and Multipart Handling**: Built-in support for parsing JSON requests and handling multipart/form-data requests.
@@ -31,12 +32,17 @@ queen.get("/", async (req, res) => {
 
 // dynamic routing
 queen.get("/users/:id", async (req, res) => {
-  res.send(`Hello user ${req.params.id}`);
+  await res.send(`Hello user ${req.params.id}`);
+});
+
+// doesn't clash with the above dynamic route
+queen.get("/users/profile", async (req, res) => {
+  await res.send(`user's profile page`);
 });
 
 // this route will receive multipart/form-data from front-end & handle file upload (see /public/index.html)
 queen.post("/upload", async (req, res) => {
-  res.json({
+  await res.json({
     message: "ok",
     data: req.body || {},
   });
@@ -44,7 +50,7 @@ queen.post("/upload", async (req, res) => {
 
 // this route will receive json body from front-end (see /public/index.html)
 queen.post("/json", async (req, res) => {
-  res.json({
+  await res.json({
     message: "ok",
     data: req.body || {},
   });
@@ -73,19 +79,13 @@ To run the example provided in this repository:
     cd queen-js
     ```
 
-3. Install dependencies:
-
-    ```
-    npm install
-    ```
-
-4. Start the server:
+3. Start the server:
 
     ```
     npm run dev
     ```
 
-5. Open your web browser and navigate to [http://localhost:3000](http://localhost:3000) to access the example.
+4. Open your web browser and navigate to [http://localhost:3000](http://localhost:3000) to access the example.
 
 The server will serve the `public/index.html` file on the root route (`GET /`). The `index.html` file contains two forms for testing various endpoints provided by Queen.js:
 - One form is for uploading files.

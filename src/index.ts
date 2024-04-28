@@ -19,18 +19,23 @@ queen.get("/", async (req, res) => {
 });
 
 queen.get("/users/:id", async (req, res) => {
-  res.send(`Hello user ${req.params.id}`);
+  await res.send(`Hello user ${req.params.id}`);
+});
+
+// doesn't clash with the above dynamic route
+queen.get("/users/profile", async (req, res) => {
+  await res.send(`user's profile page`);
 });
 
 queen.post("/upload", async (req, res) => {
-  res.json({
+  await res.json({
     message: "ok",
     data: req.body || {},
   });
 });
 
 queen.post("/json", async (req, res) => {
-  res.json({
+  await res.json({
     message: "ok",
     data: req.body || {},
   });
