@@ -29,6 +29,12 @@ queen.get("/", async (req, res) => {
   await res.sendFile("public/index.html");
 });
 
+// dynamic routing
+queen.get("/users/:id", async (req, res) => {
+  res.send(`Hello user ${req.params.id}`);
+});
+
+// this route will receive multipart/form-data from front-end & handle file upload (see /public/index.html)
 queen.post("/upload", async (req, res) => {
   res.json({
     message: "ok",
@@ -36,6 +42,7 @@ queen.post("/upload", async (req, res) => {
   });
 });
 
+// this route will receive json body from front-end (see /public/index.html)
 queen.post("/json", async (req, res) => {
   res.json({
     message: "ok",

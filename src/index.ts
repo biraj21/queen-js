@@ -4,8 +4,8 @@ import { Queen } from "./lib";
 
 const queen = new Queen();
 
+// register plugins
 queen.register(Queen.json());
-
 queen.register(Queen.multipart("custom-storage"));
 
 // request logger
@@ -16,6 +16,10 @@ queen.register((req, res, next) => {
 
 queen.get("/", async (req, res) => {
   await res.sendFile("public/index.html");
+});
+
+queen.get("/users/:id", async (req, res) => {
+  res.send(`Hello user ${req.params.id}`);
 });
 
 queen.post("/upload", async (req, res) => {
